@@ -1,4 +1,4 @@
-package com.example.to_do.ui
+package com.example.to_do.ui.todo_list
 
 import com.example.to_do.data.Todo
 

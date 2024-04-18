@@ -1,4 +1,4 @@
-package com.example.to_do.ui
+package com.example.to_do.ui.todo_list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -20,7 +20,7 @@ class TodosViewModel @Inject constructor(
     val todos = repository.getTodos()
     private var removedTodo: Todo? = null
 
-    // one-time events, channel use to handle them like clicks, navigate, snackBars
+    // one-time events, channel use to handle ui events like clicks , navigate, snackBars in viewModel
 
     private val _uiEvent = Channel<UiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
@@ -28,7 +28,7 @@ class TodosViewModel @Inject constructor(
     fun onEvent(event: ToDosEvent){
         when(event){
             is ToDosEvent.OnTouchTodo -> {
-                sendUiEvent(UiEvent.Navigate(Routes.ADD_EDIT_TODO + "todoId=${event.todo.id}"))
+                sendUiEvent(UiEvent.Navigate(Routes.ADD_EDIT_TODO + "?todoId=${event.todo.id}"))
             }
 
             is ToDosEvent.DeleteTodo -> {
