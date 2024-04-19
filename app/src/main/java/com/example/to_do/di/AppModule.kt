@@ -1,10 +1,7 @@
 package com.example.to_do.di
 
 import android.app.Application
-import androidx.room.Insert
 import androidx.room.Room
-import androidx.room.RoomDatabase
-import com.example.to_do.ToDoApp
 import com.example.to_do.data.TodoDatabase
 import com.example.to_do.data.TodoRepository
 import com.example.to_do.data.TodoRepositoryImpl

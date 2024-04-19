@@ -14,8 +14,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TodosViewModel @Inject constructor(
-    val repository: TodoRepository
-): ViewModel() {
+    private val repository: TodoRepository
+) : ViewModel() {
 
     val todos = repository.getTodos()
     private var removedTodo: Todo? = null
@@ -25,8 +25,8 @@ class TodosViewModel @Inject constructor(
     private val _uiEvent = Channel<UiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
 
-    fun onEvent(event: ToDosEvent){
-        when(event){
+    fun onEvent(event: ToDosEvent) {
+        when (event) {
             is ToDosEvent.OnTouchTodo -> {
                 sendUiEvent(UiEvent.Navigate(Routes.ADD_EDIT_TODO + "?todoId=${event.todo.id}"))
             }
@@ -35,23 +35,26 @@ class TodosViewModel @Inject constructor(
                 viewModelScope.launch {
                     removedTodo = event.todo
                     repository.removeTodo(event.todo)
-                    sendUiEvent(UiEvent.ShowSnackBar("Todo removed", "Undo"))
+                    sendUiEvent(UiEvent.ShowSnackBar(message = "Todo removed", action = "Undo"))
                 }
 
             }
+
             is ToDosEvent.OnAddToDo -> {
                 sendUiEvent(UiEvent.Navigate(Routes.ADD_EDIT_TODO))
             }
+
             is ToDosEvent.OnDoneChange -> {
                 viewModelScope.launch {
                     repository.insertTodo(
                         event.todo.copy(
-                            isDone =  event.isDone
+                            isDone = event.isDone
                         )
                     )
                 }
 
             }
+
             is ToDosEvent.OnUndoRemoveClick -> {
                 removedTodo?.let { todo ->
                     viewModelScope.launch {
@@ -62,13 +65,9 @@ class TodosViewModel @Inject constructor(
         }
     }
 
-    private fun sendUiEvent(event: UiEvent){
+    private fun sendUiEvent(event: UiEvent) {
         viewModelScope.launch {
             _uiEvent.send(event)
         }
     }
-
-
-
-
 }

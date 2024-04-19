@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
     id ("dagger.hilt.android.plugin")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -80,10 +81,18 @@ dependencies {
     kapt ("androidx.hilt:hilt-compiler:1.2.0")
     implementation ("androidx.hilt:hilt-navigation-compose:1.2.0")
 
+    //ksp for Room
+    implementation ("com.google.devtools.ksp:symbol-processing-api:1.9.22-1.0.17")
+
     // Room
     implementation ("androidx.room:room-runtime:2.6.1")
-    kapt ("androidx.room:room-compiler:2.6.1")
+//    kapt ("androidx.room:room-compiler:2.6.1")
+    ksp("androidx.room:room-compiler:2.6.1")
+
+
+
 
     // Kotlin Extensions and Coroutines support for Room
     implementation ("androidx.room:room-ktx:2.6.1")
+
 }

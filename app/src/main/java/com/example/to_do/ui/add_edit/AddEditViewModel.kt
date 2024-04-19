@@ -19,7 +19,7 @@ import javax.inject.Inject
 class AddEditViewModel @Inject constructor(
     private val repository: TodoRepository,
     savedStateHandle: SavedStateHandle
-) : ViewModel(){
+) : ViewModel() {
 
     var todo by mutableStateOf<Todo?>(null)
         private set
@@ -33,10 +33,9 @@ class AddEditViewModel @Inject constructor(
     val uiEvent = _uiEvent.receiveAsFlow()
 
 
-
     init {
-        val todoId  =savedStateHandle.get<Int>("todoId")!!
-        if(todoId != -1){
+        val todoId = savedStateHandle.get<Int>("todoId")!!
+        if (todoId != -1) {
             viewModelScope.launch {
                 repository.getTodoById(todoId)?.let { todo ->
                     title = todo.title
@@ -50,22 +49,23 @@ class AddEditViewModel @Inject constructor(
         }
     }
 
-    fun onEvent(event: AddEditTodoEvent){
+    fun onEvent(event: AddEditTodoEvent) {
 
-        when(event){
+        when (event) {
             is AddEditTodoEvent.OnDescriptionChange -> {
                 description = event.desc
 
             }
+
             AddEditTodoEvent.OnSaveTodoClick -> {
                 viewModelScope.launch {
-                    if(title.isBlank()){
+                    if (title.isBlank()) {
                         sendUiEvent(UiEvent.ShowSnackBar("The title can't be empty"))
                         return@launch
                     }
                     repository.insertTodo(Todo(title, description, todo?.isDone ?: false, todo?.id))
+                    sendUiEvent(UiEvent.PopBackStack)
                 }
-                sendUiEvent(UiEvent.PopBackStack)
             }
 
             is AddEditTodoEvent.OnTitleChange -> {
@@ -73,9 +73,9 @@ class AddEditViewModel @Inject constructor(
 
             }
         }
-
     }
-    private fun sendUiEvent(event: UiEvent){
+
+    private fun sendUiEvent(event: UiEvent) {
         viewModelScope.launch {
             _uiEvent.send(event)
         }
