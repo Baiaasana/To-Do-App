@@ -60,7 +60,7 @@ fun DeleteBackground(
 ) {
 
     val color = if (swipeDismissState.dismissDirection == DismissDirection.EndToStart) {
-        colorResource(id = R.color.text_primary)
+        colorResource(id = R.color.text_secondary)
     } else {
         Color.Transparent
     }
